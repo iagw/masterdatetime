@@ -5,6 +5,8 @@
 # 46 in a short day (last Sunday in March)
 # 50 in a long day (last Sunday in October)
 # takes 30s to run on macbook pro 2.9Ghz intel core i7
+# from Energy Data Analytics Group at the University of Birmingham, UK
+# contact details: https://www.birmingham.ac.uk/staff/profiles/chemical-engineering/wilson-grant.aspx
 
 import os.path
 import time
