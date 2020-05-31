@@ -10,9 +10,6 @@ import os.path
 import time
 import pandas as pd
 
-home_folder = os.getenv('HOME')
-filepath = f'{home_folder}/Dropbox/data/'
-
 start_time = time.time()
 
 # the start and end dates for analysis are set here
@@ -97,8 +94,6 @@ shortlongflags(dfa, 'localtime')
 dfa['localtime'] = dfa['localtime'].dt.strftime('%Y-%m-%d %H:%M:%S')
 
 # csv output
-bstmaster = f'{filepath}/bs_time'
-os.chdir(bstmaster)
 dfa.to_csv('masterlocaltime.csv', encoding='Utf-8', index=False)
 
 print("time elapsed: {:.2f}s".format(time.time() - start_time))
