@@ -1,5 +1,6 @@
 # masterdatetime.py
 
+dataset can be downloaded from https://zenodo.org/record/3887182
 script creates a csv file that can be subsequently used to map date and settlement period
 data to utc and localtime uses the format YYYY-MM-DD_SP where SP is the half-hourly settlement period from 01 to 50
 there are:
