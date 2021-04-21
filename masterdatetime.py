@@ -1,12 +1,13 @@
-# script creates a csv file that can be subsequently used to map date and settlement period
-# data to utc and localtime uses the format YYYY-MM-DD_SP where SP is the settlement period from 01 to 50
+# script creates a csv file that can be subsequently used to map settlement date and settlement period
+# data to utc and localtime using a format YYYY-MM-DD_SP where SP is the settlement period from 01 to 50
 # there are:
 # 48 settlement periods in a normal day,
 # 46 in a short day (last Sunday in March)
 # 50 in a long day (last Sunday in October)
 # takes 30s to run on macbook pro 2.9Ghz intel core i7
-# from Energy Data Analytics Group at the University of Birmingham, UK
-# contact details: https://www.birmingham.ac.uk/staff/profiles/chemical-engineering/wilson-grant.aspx
+# takes 7s to run on Macbook Pro M1 (2020)
+# from Energy Informatics Group at the University of Birmingham, UK
+# contact details: https://orcid.org/0000-0003-4083-597X
 
 import os.path
 import time
@@ -20,7 +21,7 @@ start_time = time.time()
 # and 12midnight on the last saturday in March
 # as this code creates data that is subsequently used to map values from date and settlement periods
 # suggest setting the startdate to the first day of a year
-startdate = '2000-01-01'
+startdate = '2005-01-01'
 enddate = '2030-12-31'
 
 # creates a utc column of dates between the start and end dates
@@ -53,7 +54,6 @@ def shortlongflags(dfname, datetimecol):
     return (dfname)
 
 shortlongflags(df, 'utc')
-
 
 # the boolean columns are used to put settlement period count values
 # 48 settlement periods in a normal day,
