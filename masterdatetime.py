@@ -33,6 +33,7 @@ enddate = '2030-12-31'
 df = pd.DataFrame()
 df['utc'] = pd.date_range(start=startdate, end=enddate, freq='D', tz='UTC')
 df['utc_date'] = df['utc'].apply(lambda x: str(x.date()))
+# df['utc_date'] = df['utc'].dt.date.astype(str)
 df['localtime'] = df['utc'].dt.tz_convert('Europe/London')
 df['localtimeisdst'] = df['localtime'].apply(lambda x: bool(x.dst()))
 df['clockchange'] = df['localtimeisdst'].diff()
@@ -93,7 +94,8 @@ dfa['localtimeisdst'] = dfa['localtime'].apply(lambda x: bool(x.dst()))
 # the shortlongflags def is called on the dataframe to provide boolean columns for short, long and normal days
 shortlongflags(dfa, 'localtime')
 # changed to string so that localtime is preserved in string form
-dfa['localtime'] = dfa['localtime'].dt.strftime('%Y-%m-%d %H:%M:%S')
+dfa['localtime'] = dfa['localtime'].map(lambda x: x.isoformat())
+dfa['utc'] = dfa['utc'].map(lambda x: x.isoformat())
 
 # csv output
 dfa.to_csv('masterlocaltime.csv', encoding='Utf-8', index=False)
