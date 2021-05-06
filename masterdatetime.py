@@ -15,13 +15,17 @@ import pandas as pd
 
 start_time = time.time()
 
+home_folder = os.getenv('HOME')
+output = f'{home_folder}/OneDrive - University of Birmingham/elexon_ng_espeni/'
+os.chdir(output)
+
 # the start and end dates for analysis are set here
 # the startdate must be in non-daylight savings for the code to work
 # i.e. the startdate must be between the 2am on the last sunday in October
 # and 12midnight on the last saturday in March
 # as this code creates data that is subsequently used to map values from date and settlement periods
 # suggest setting the startdate to the first day of a year
-startdate = '2005-01-01'
+startdate = '2001-01-01'
 enddate = '2030-12-31'
 
 # creates a utc column of dates between the start and end dates
@@ -78,11 +82,15 @@ for i, row in df.iterrows():
     for j in range(1, row['settlement_period_count'] + 1):
         dftemplist.append(tempval + '_' + str(j).zfill(2))
 
-# creates a df from the dftemplist and creates str columns of the date and settlement_period
+# creates a dfa from the dftemplist and creates str columns of the date and settlement_period
 # then uses module to add short and long day flags
 dfa = pd.DataFrame(dftemplist, columns=['datesp'])
-dfa['settlementdate'] = dfa['datesp'].str[:10]
-dfa['settlementperiod'] = dfa['datesp'].str[-2:]
+dfa['settlementdate'] = dfa['datesp'].map(lambda x: x.split('_')[0])
+dfa['settlementperiod'] = dfa['datesp'].map(lambda x: x.split('_')[1])
+
+
+# dfa['settlementdate'] = dfa['datesp'].str[:10]
+# dfa['settlementperiod'] = dfa['datesp'].str[-2:]
 # creates a utc column of 30 minute values that starts at the same datetime as the startdate
 # and has the same length as the dataframe
 # this matches the settlement date, settlement period text e.g. 2020-12-30_03
@@ -91,13 +99,22 @@ dfa['settlementperiod'] = dfa['datesp'].str[-2:]
 dfa['utc'] = pd.date_range(start=startdate, periods=dfa.shape[0], freq='30min', tz='UTC')
 dfa['localtime'] = dfa['utc'].dt.tz_convert('Europe/London')
 dfa['localtimeisdst'] = dfa['localtime'].apply(lambda x: bool(x.dst()))
+
+
 # the shortlongflags def is called on the dataframe to provide boolean columns for short, long and normal days
 shortlongflags(dfa, 'localtime')
+
 # changed to string so that localtime is preserved in string form
 dfa['localtime'] = dfa['localtime'].map(lambda x: x.isoformat())
 dfa['utc'] = dfa['utc'].map(lambda x: x.isoformat())
 
 # csv output
 dfa.to_csv('masterlocaltime.csv', encoding='Utf-8', index=False)
+
+# for isoformat output
+dfa['localtime'] = dfa['utc'].dt.tz_convert('Europe/London')
+dfa['localtime'] = dfa['localtime'].map(lambda x: x.isoformat())
+dfa['utc'] = dfa['utc'].map(lambda x: x.isoformat())
+dfa.to_csv('masterlocaltime_iso8601.csv', encoding='Utf-8', index=False)
 
 print("time elapsed: {:.2f}s".format(time.time() - start_time))
