@@ -1,0 +1,3 @@
+2021-05-10 checksum file added using checksums using shasum -a 256
+2dff6bc393464e31de3509860cee32bf6bf953601e65ba78bdb307aca806105e  masterdatetime.py
+879eab015684be48c04909c7bcadc19396ce221ed3a3e9a1c85d733e9021f889  masterlocaltime.csv
