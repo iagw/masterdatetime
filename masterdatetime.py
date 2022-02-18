@@ -9,9 +9,13 @@
 # from Energy Informatics Group at the University of Birmingham, UK
 # contact details: https://orcid.org/0000-0003-4083-597X
 
+
 import os.path
 import time
 import pandas as pd
+
+pd.set_option('display.max_rows', None)
+pd.set_option('display.max_columns', None)
 
 start_time = time.time()
 
@@ -104,17 +108,10 @@ dfa['localtimeisdst'] = dfa['localtime'].apply(lambda x: bool(x.dst()))
 # the shortlongflags def is called on the dataframe to provide boolean columns for short, long and normal days
 shortlongflags(dfa, 'localtime')
 
-# changed to string so that localtime is preserved in string form
-dfa['localtime'] = dfa['localtime'].map(lambda x: x.isoformat())
-dfa['utc'] = dfa['utc'].map(lambda x: x.isoformat())
-
-# csv output
-dfa.to_csv('masterlocaltime.csv', encoding='Utf-8', index=False)
-
 # for isoformat output
-dfa['localtime'] = dfa['utc'].dt.tz_convert('Europe/London')
 dfa['localtime'] = dfa['localtime'].map(lambda x: x.isoformat())
 dfa['utc'] = dfa['utc'].map(lambda x: x.isoformat())
 dfa.to_csv('masterlocaltime_iso8601.csv', encoding='Utf-8', index=False)
+dfa.to_parquet('masterlocaltime_iso8601.parquet', index=False)
 
 print("time elapsed: {:.2f}s".format(time.time() - start_time))
